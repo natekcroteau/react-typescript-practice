@@ -43,24 +43,54 @@ Container.defaultProps = defaultContainerProps;
 
 // Functional Properties
   //The children prop type is a function that accepts a number
-function TextWithNumber({children}: {children: (num: number) => ReactNode}) {
+function TextWithNumber({
+  children, 
+  header
+}: {
+  children: (num: number) => ReactNode,
+  header?: (num: number) => ReactNode //header is optional typing, due to ?
+}) {
   //the default state type is set for number
   const [state, setState] = useState<number>(1);
 
   //onClick has an anonymous function that increments the state count
+  //optional header uses ?. for if no header prop is passed to <TextWithNumber> below
   return(
     <div>
-      <div>
-        {children(state)}
-      </div>
+      <h2>{header?.(state)}</h2>
       <div>
         <button onClick={() => setState(state + 1)}> 
-          Add One
+          Add One To State
         </button>
+      </div>
+      <div>
+        {children(state)}
       </div>
     </div>
   );
 }
+
+
+
+// List with generic typing
+function List<ListItem>({
+  items,
+  render,
+}: {
+  items: ListItem[],
+  render: (item: ListItem) => ReactNode
+}) {
+  return(
+    <ul>
+      {items.map((item, index) => (
+        <li key={index}>
+          {render(item)}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 
 
 //The TextWithNumber component's children is an anonymous function that is the result of {children(state)} above
@@ -72,9 +102,10 @@ function App() {
         <strong>Two</strong>
       </HeadingWithContent>
       <Container>Four</Container>
-      <TextWithNumber>
+      <TextWithNumber header={(num: number) => <span>State Count = {num}</span>}>
         {(num: number) => <div>State Number = {num}</div>}
       </TextWithNumber>
+      <List items={["a", "b", "c", "d", "e"]} render={(item: string) => <div>{item.toUpperCase()}</div>}></List>
     </div>
   );
 }
