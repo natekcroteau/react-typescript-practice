@@ -1,23 +1,23 @@
 import React, { ReactNode, ReactElement } from 'react';
-import { useState } from 'react';
+import { useState, Component } from 'react';
 import './App.css';
 
 
 
 // Conventional Props declaring the argument and then the type for the argument
-function Heading({title}: { title: string;}){
+function Heading({title}: { title: string }){
   return(
     <h1>{title}</h1>
-  )
+  );
 }
 
 
 
 // Children type ReactNode allows you to use react element type, with ReactElement as the return type 
-function HeadingWithContent({children}: { children: ReactNode;}): ReactElement {
+function HeadingWithContent({children}: { children: ReactNode }): ReactElement {
   return(
     <h1>{children}</h1>
-  )
+  );
 }
 
 
@@ -88,7 +88,16 @@ function List<ListItem>({
         </li>
       ))}
     </ul>
-  )
+  );
+}
+
+
+
+// Class Component with Static Typing
+class MyHeader extends Component<{ title: ReactNode }>{
+  render() {
+    return <h1>{this.props.title}</h1>;
+  }
 }
 
 
@@ -106,6 +115,7 @@ function App() {
         {(num: number) => <div>State Number = {num}</div>}
       </TextWithNumber>
       <List items={["a", "b", "c", "d", "e"]} render={(item: string) => <div>{item.toUpperCase()}</div>}></List>
+      <MyHeader title="My Class Based Header Title"></MyHeader>
     </div>
   );
 }
